@@ -1263,3 +1263,16 @@ article.overview:hover {
   padding: var(--spacing-3);
 }
 
+/* ===== ADITYA NAV CUSTOMIZATION ===== */
+
+/* Make Explore icon the same size as Art */
+nav .button.active > div i img {
+    width: 16px !important;
+    height: 16px !important;
+    object-fit: contain;
+}
+
+/* Remove the last navigation/toggle button */
+nav .button:last-child {
+    display: none !important;
+}
