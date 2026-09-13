@@ -1265,31 +1265,55 @@ article.overview:hover {
 
 /* ===== ADITYA NAV CUSTOMIZATION ===== */
 
+/* Remove the unwanted white border/line */
+nav .button.active,
+nav .button.active:hover {
+    border-color: transparent !important;
+}
+
 /* Explore icon box */
 nav .button.active > div > i {
     width: 16px !important;
     height: 16px !important;
     min-width: 16px !important;
     min-height: 16px !important;
+
     margin: var(--spacing-2) !important;
-    background-color: #00A86B !important;
+
+    /* NO green background */
+    background-color: transparent !important;
 }
 
-/* Explore icon image */
-nav .button.active > div > i > img {
+/* SVG itself */
+nav .button.active > div > i svg {
     width: 16px !important;
     height: 16px !important;
-    max-width: 16px !important;
-    max-height: 16px !important;
-    object-fit: contain !important;
+    display: block;
+    fill: #ffffff !important;
 }
 
-/* Keep Explore background normal */
+/* Brown Explore box */
 nav .button.active > div {
-    background: linear-gradient(
-        to left,
-        var(--black) 50%,
-        var(--blank) 50%
-    ) right !important;
-    background-size: 250% 100% !important;
+    background: #D7834F !important;
+    background-image: none !important;
+    color: #000000 !important;
+
+    /* slightly taller than Resume */
+    min-height: 30px !important;
+    height: 30px !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+
+/* Remove the extra active-item height from the original CSS */
+nav .button.active > div {
+    margin-bottom: 0 !important;
+}
+
+/* Remove last hidden toggle/button */
+nav .button:last-child {
+    display: none !important;
 }
