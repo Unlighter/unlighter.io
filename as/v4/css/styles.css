@@ -1263,11 +1263,100 @@ article.overview:hover {
   padding: var(--spacing-3);
 }
 
-/* ===== ADITYA NAV CUSTOMIZATION ===== */
+/* ===== ADITYA NAV FIX ===== */
 
-/* Explore background — use the site's existing dark brown */
+/* Remove the unwanted borders around Explore */
+#nav-explore {
+    border: none !important;
+    animation: none !important;
+}
+
+/* Explore box */
 #nav-explore > div {
     background: var(--black) !important;
     background-image: none !important;
+
+    color: var(--background) !important;
+
+    height: 30px !important;
+    min-height: 30px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    box-sizing: border-box;
+
+    display: flex !important;
+    align-items: center !important;
 }
 
+/* Explore icon */
+#nav-explore > div > i {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+
+    margin: 4px !important;
+
+    background: transparent !important;
+}
+
+/* Explore cloud */
+#nav-explore > div > i svg {
+    width: 16px !important;
+    height: 16px !important;
+
+    fill: var(--background) !important;
+}
+
+/* All navigation buttons */
+nav .button > div {
+    height: 30px !important;
+    min-height: 30px !important;
+
+    padding: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+
+    box-sizing: border-box;
+
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* All navigation icons */
+nav .button > div > i {
+    width: 16px !important;
+    height: 16px !important;
+
+    min-width: 16px !important;
+    min-height: 16px !important;
+
+    margin: 4px !important;
+
+    background: transparent !important;
+}
+
+/* All navigation SVG icons */
+nav .button > div > i svg {
+    width: 16px !important;
+    height: 16px !important;
+
+    display: block !important;
+
+    fill: var(--background) !important;
+}
+
+/* Remove the extra final button */
+nav > .button:last-child {
+    display: none !important;
+}
+
+/* Left grey block */
+nav > .left-border {
+    height: 30px !important;
+    min-height: 30px !important;
+
+    box-sizing: border-box;
+}
