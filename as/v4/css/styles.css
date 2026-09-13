@@ -1263,3 +1263,11 @@ article.overview:hover {
   padding: var(--spacing-3);
 }
 
+/* ===== ADITYA NAV CUSTOMIZATION ===== */
+
+/* Explore background — use the site's existing dark brown */
+#nav-explore > div {
+    background: var(--black) !important;
+    background-image: none !important;
+}
+
