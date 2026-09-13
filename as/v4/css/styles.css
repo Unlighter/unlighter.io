@@ -185,7 +185,7 @@ code:not([class^=language-]) {
   align-items: center;
   justify-content: center;
   margin: var(--spacing-2);
-  background-color: var(--black);
+  background-color: transparent;
   width: var(--icon-button-size);
   height: var(--icon-button-size);
   fill: var(--white);
