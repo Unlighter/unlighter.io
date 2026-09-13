@@ -143,6 +143,15 @@ code:not([class^=language-]) {
   animation: flash var(--button-flash-animation) infinite;
 }
 
+#nav-puzzles.button.active:hover>div {
+  background-position: right;
+  color: var(--white);
+}
+
+#nav-puzzles.button.active:hover {
+  border-color: var(--black);
+}
+
 .button>div {
   width: 100%;
   display: flex;
