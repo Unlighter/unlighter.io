@@ -1265,61 +1265,31 @@ article.overview:hover {
 
 /* ===== ADITYA NAV CUSTOMIZATION ===== */
 
-/* Make Explore icon the same size as Art */
-nav .button.active > div i img {
-    width: 16px !important;
-    height: 16px !important;
-    object-fit: contain;
-}
-
-/* Remove the last navigation/toggle button */
-nav .button:last-child {
-    display: none !important;
-}
-
-/* ===== EXPLORE ICON ===== */
-
-/* Icon box */
+/* Explore icon box */
 nav .button.active > div > i {
     width: 16px !important;
     height: 16px !important;
     min-width: 16px !important;
     min-height: 16px !important;
     margin: var(--spacing-2) !important;
-    background-color: #D7834F !important;
+    background-color: #00A86B !important;
 }
 
-/* Actual image */
-nav .button.active > div > i img {
-    width: 12px !important;
-    height: 12px !important;
-    max-width: 12px !important;
-    max-height: 12px !important;
-    object-fit: contain !important;
-}
-
-/* Make Explore text brown too, just for testing */
-nav .button.active > div {
-    background: #D7834F !important;
-    background-image: none !important;
-    color: #000000 !important;
-}
-
-
-/* ===== ADITYA NAV ===== */
-
-nav .button.active > div > i {
-    width: 16px !important;
-    height: 16px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    background-color: #D7834F !important;
-}
-
+/* Explore icon image */
 nav .button.active > div > i > img {
     width: 16px !important;
     height: 16px !important;
     max-width: 16px !important;
     max-height: 16px !important;
     object-fit: contain !important;
+}
+
+/* Keep Explore background normal */
+nav .button.active > div {
+    background: linear-gradient(
+        to left,
+        var(--black) 50%,
+        var(--blank) 50%
+    ) right !important;
+    background-size: 250% 100% !important;
 }
