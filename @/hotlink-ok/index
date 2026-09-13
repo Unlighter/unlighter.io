@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="copyright" content="© 2016 - 2024 Lecoq Simon">
+    <meta name="description" content="Portfolio of a weird developer. Discover some of my works, projects, and games or consult my resume to know more about me :)">
+    <meta property="og:title" content="Lecoq.io | Aditya Bhoj's online portfolio">
+    <meta property="og:description" content="Portfolio of a weird developer. Discover some of my works, projects, and games or consult my resume to know more about me :)">
+    <meta property="og:url" content="https://simon.lecoq.io">
+    <meta property="og:image" content="https://simon.lecoq.io/@/hotlink-ok/icon-og.png">
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://simon.lecoq.io">
+    <link rel="icon" type="image/png" href="/@/hotlink-ok/favicon.png">
+    <link rel="icon" href="/@/hotlink-ok/icon.png" sizes="114x114">
+    <link rel="apple-touch-icon" sizes="114x114" href="/@/hotlink-ok/icon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/@/hotlink-ok/icon.png">
+    <title>Lecoq.io | Aditya Bhoj's online portfolio</title>
+    <meta name="msvalidate.01" content="F7EEDDD08D9B111DCE4BCA8C23B04989">
+    <link rel="stylesheet" href="/as/v4/css/root.css?v=0.9">
+    <link rel="preload" href="/as/v4/css/styles.css?v=0.9" as="style">
+    <link rel="preload" href="/as/v4/css/tokyo-night-dark.min.css?v=0.9" as="style">
+    <link rel="preload" href="/as/v4/js/vue.min.js?v=0.9" as="script">
+    <link rel="preload" href="/as/v4/js/marked.min.js?v=0.9" as="script">
+    <link rel="preload" href="/as/v4/js/lazyload.min.js?v=0.9" as="script">
+    <link rel="preload" href="/as/v4/content/en.json" as="fetch" crossorigin>
+    <link rel="preload" href="/as/v4/content/feed/pages/0.json" as="fetch" crossorigin>
+  </head>
+  <body ontouchmove>
+    <main>
+      <!-- Loader -->
+      <div id="loader">
+        <div id="unsupported">
+          <strong>[NOTICE]</strong><br>
+          It seems your browser is not compatible with my portfolio...<br>
+          You can still checkout my <a href="https://github.com/lowlighter">GitHub</a> or my <a href="https://www.linkedin.com/in/simon-lecoq/">LinkedIn</a> if you wish.
+          <br>
+          <sub>Sorry for the trouble く8彡</sub>
+        </div>
+        <div id="loader-bar">
+          <div></div>
+        </div>
+        <div id="loader-text">&nbsp;</div>
+      </div>
+      <transition name="fade">
+        <div class="overlay" v-if="tab?.id !== 'art'"></div>
+      </transition>
+      <template v-if="true">
+        <!-- Loader transition -->
+        <div class="loader" v-if="!loaded">
+          <svg height="1000" width="2000" v-once>
+            <template v-for="(_, y) in 8">
+              <polygon v-for="(_, x) in 16" :key="`${x};{y}`" :points="`${(x+0)*125+(y%2)*125-2*125},${y*125+(x%2)*125} ${(x+1)*125+(y%2)*125-2*125},${y*125+(!(x%2))*125} ${(x+2)*125+(y%2)*125-2*125},${y*125+(x%2)*125}`" style="fill:var(--background);stroke:var(--background);opacity:0">
+                <animate attributeName="opacity" values="0;1" dur="0.04s" calcMode="spline" :begin="`${0.4*Math.random()}s`" repeatCount="1" fill="freeze"/>
+              </polygon>
+            </template>
+          </svg>
+        </div>
+        <!-- Menu -->
+        <nav v-once>
+          <transition-group name="fade">
+            <div class="left-border" v-show="loaded" :style="{transition:`opacity var(--fade-animation) ease-in calc(var(--translation-animation) / 2)`}" :key="'border'"></div>
+            <div v-for="(entry, i) in menu" class="button" :class="{disabled:entry.disabled, active:tab?.id === entry.id}" :style="{transition:`opacity var(--fade-animation) ease-in calc(var(--translation-animation) / 2 + ${i} * var(--fade-menu-delay))`}" :key="entry.id" @click="!entry.disabled ? tab = entry : null">
+              <div>
+                <i>
+                  <svg v-if="entry.id === 'feed'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M2 7.25A5.225 5.225 0 0 1 7.25 2a5.222 5.222 0 0 1 4.767 3.029A4.472 4.472 0 0 1 16 9.5c0 2.505-1.995 4.5-4.5 4.5h-8A3.474 3.474 0 0 1 0 10.5c0-1.41.809-2.614 2.001-3.17Zm1.54.482a.75.75 0 0 1-.556.832c-.86.22-1.484.987-1.484 1.936 0 1.124.876 2 2 2h8c1.676 0 3-1.324 3-3s-1.324-3-3-3a.75.75 0 0 1-.709-.504A3.72 3.72 0 0 0 7.25 3.5C5.16 3.5 3.5 5.16 3.5 7.25c.002.146.014.292.035.436l.004.036.001.008Z"></path></svg>
+                  <svg v-else-if="entry.id === 'memory'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M2.5 5.724V8c0 .248.238.7 1.169 1.159.874.43 2.144.745 3.62.822a.75.75 0 1 1-.078 1.498c-1.622-.085-3.102-.432-4.204-.975a5.565 5.565 0 0 1-.507-.28V12.5c0 .133.058.318.282.551.227.237.591.483 1.101.707 1.015.447 2.47.742 4.117.742.406 0 .802-.018 1.183-.052a.751.751 0 1 1 .134 1.494C8.89 15.98 8.45 16 8 16c-1.805 0-3.475-.32-4.721-.869-.623-.274-1.173-.619-1.579-1.041-.408-.425-.7-.964-.7-1.59v-9c0-.626.292-1.165.7-1.591.406-.42.956-.766 1.579-1.04C4.525.32 6.195 0 8 0c1.806 0 3.476.32 4.721.869.623.274 1.173.619 1.579 1.041.408.425.7.964.7 1.59 0 .626-.292 1.165-.7 1.591-.406.42-.956.766-1.578 1.04C11.475 6.68 9.805 7 8 7c-1.805 0-3.475-.32-4.721-.869a6.15 6.15 0 0 1-.779-.407Zm0-2.224c0 .133.058.318.282.551.227.237.591.483 1.101.707C4.898 5.205 6.353 5.5 8 5.5c1.646 0 3.101-.295 4.118-.742.508-.224.873-.471 1.1-.708.224-.232.282-.417.282-.55 0-.133-.058-.318-.282-.551-.227-.237-.591-.483-1.101-.707C11.102 1.795 9.647 1.5 8 1.5c-1.646 0-3.101.295-4.118.742-.508.224-.873.471-1.1.708-.224.232-.282.417-.282.55Z"></path><path d="M14.49 7.582a.375.375 0 0 0-.66-.313l-3.625 4.625a.375.375 0 0 0 .295.606h2.127l-.619 2.922a.375.375 0 0 0 .666.304l3.125-4.125A.375.375 0 0 0 15.5 11h-1.778l.769-3.418Z"></path></svg>
+                  <svg v-else-if="entry.id === 'code'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0114.25 15H1.75A1.75 1.75 0 010 13.25V2.75zm1.75-.25a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25V2.75a.25.25 0 00-.25-.25H1.75zM7.25 8a.75.75 0 01-.22.53l-2.25 2.25a.75.75 0 11-1.06-1.06L5.44 8 3.72 6.28a.75.75 0 111.06-1.06l2.25 2.25c.141.14.22.331.22.53zm1.5 1.5a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z"></path></svg>
+                  <svg v-else-if="entry.id === 'art'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M16 13.25A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25V2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75ZM1.75 2.5a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h.94l.03-.03 6.077-6.078a1.75 1.75 0 0 1 2.412-.06L14.5 10.31V2.75a.25.25 0 0 0-.25-.25Zm12.5 11a.25.25 0 0 0 .25-.25v-.917l-4.298-3.889a.25.25 0 0 0-.344.009L4.81 13.5ZM7 6a2 2 0 1 1-3.999.001A2 2 0 0 1 7 6ZM5.5 6a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path></svg>
+                  <svg v-else-if="entry.id === 'resume'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M6.5.75V2h3V.75a.75.75 0 0 1 1.5 0V2h1.25c.966 0 1.75.784 1.75 1.75V5h1.25a.75.75 0 0 1 0 1.5H14v3h1.25a.75.75 0 0 1 0 1.5H14v1.25A1.75 1.75 0 0 1 12.25 14H11v1.25a.75.75 0 0 1-1.5 0V14h-3v1.25a.75.75 0 0 1-1.5 0V14H3.75A1.75 1.75 0 0 1 2 12.25V11H.75a.75.75 0 0 1 0-1.5H2v-3H.75a.75.75 0 0 1 0-1.5H2V3.75C2 2.784 2.784 2 3.75 2H5V.75a.75.75 0 0 1 1.5 0Zm5.75 11.75a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25ZM5.75 5h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5A.75.75 0 0 1 5.75 5Zm.75 4.5h3v-3h-3Z"></path></svg>
+                  <svg v-else-if="entry.id === 'social'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M10.628 7.25a2.25 2.25 0 1 1 0 1.5H8.622a2.25 2.25 0 0 1-2.513 1.466L5.03 12.124a2.25 2.25 0 1 1-1.262-.814l1.035-1.832A2.245 2.245 0 0 1 4.25 8c0-.566.209-1.082.553-1.478L3.768 4.69a2.25 2.25 0 1 1 1.262-.814l1.079 1.908A2.25 2.25 0 0 1 8.622 7.25ZM2.5 2.5a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Zm4 4.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm6.25 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm-9.5 5.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"></path></svg>
+                </i>
+                {{ entry.name }}
+              </div>
+            </div>
+          </transition-group>
+          <div class="button">
+            <div>
+              <i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.5.75a.75.75 0 00-1.5 0V2H3.75A1.75 1.75 0 002 3.75V5H.75a.75.75 0 000 1.5H2v3H.75a.75.75 0 000 1.5H2v1.25c0 .966.784 1.75 1.75 1.75H5v1.25a.75.75 0 001.5 0V14h3v1.25a.75.75 0 001.5 0V14h1.25A1.75 1.75 0 0014 12.25V11h1.25a.75.75 0 000-1.5H14v-3h1.25a.75.75 0 000-1.5H14V3.75A1.75 1.75 0 0012.25 2H11V.75a.75.75 0 00-1.5 0V2h-3V.75zm5.75 11.75h-8.5a.25.25 0 01-.25-.25v-8.5a.25.25 0 01.25-.25h8.5a.25.25 0 01.25.25v8.5a.25.25 0 01-.25.25zM5.75 5a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-4.5a.75.75 0 00-.75-.75h-4.5zm.75 4.5v-3h3v3h-3z"></path></svg>
+              </i>
+              .
+            </div>
+          </div>
+        </nav>
+        <!-- Separator -->
+        <transition name="from-right">
+          <div class="separator" v-if="loaded">
+            <div></div>
+          </div>
+        </transition>
+        <!-- Header -->
+        <header v-if="loaded">
+          <transition name="fade" appear>
+            <div class="title" :key="tab?.id">{{ current }}</div>
+          </transition>
+          <!-- <input type="text" v-model="search"> -->
+        </header>
+        <!-- Main content -->
+        <transition-group name="fade">
+          <template v-if="(loaded)&&(tab?.id === 'code' || tab?.id === 'blog')" :key="tab?.id ?? 'content'">
+            <!-- Submenu -->
+            <aside :class="{open:state.aside.open}">
+              <div class="left-border"></div>
+              <div class="content">
+                <div class="title" v-if="state.aside.open">{{ current }}</div>
+                <transition-group name="fade" appear>
+                  <div v-for="(entry, i) in section" :class="{button:entry.cards, active:selected?.id === entry.id, category:entry.category}" :key="`${tab.id}-${entry.id}-${i}`" :style="{transition:`opacity var(--fade-animation) ease-in calc(${Math.min(i, 32)} * var(--fade-aside-delay))`}" @click="state.aside.open ? entry.category ? null : state.aside.open = false : state.aside.open = (selected?.id === entry.id)">
+                    <div @click="!entry.category ? selected = entry : null">
+                      <div>
+                        <span v-html="markdown(entry.name)"></span>
+                      </div>
+                    </div>
+                  </div>
+                </transition-group>
+              </div>
+            </aside>
+            <!-- Content -->
+            <transition name="fade">
+              <section v-if="section.length" :key="language">
+                <transition-group name="fade" appear>
+                  <!-- Language selection and metadata -->
+                  <div class="metadata" v-if="selected" :key="`${tab.id}-${selected.id}-metadata`">
+                    <div class="date" v-if="selected.created">
+                      <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M4.75 0a.75.75 0 01.75.75V2h5V.75a.75.75 0 011.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0113.25 16H2.75A1.75 1.75 0 011 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 014.75 0zm0 3.5h8.5a.25.25 0 01.25.25V6h-11V3.75a.25.25 0 01.25-.25h2zm-2.25 4v6.75c0 .138.112.25.25.25h10.5a.25.25 0 00.25-.25V7.5h-11z"></path></svg>
+                      </i>
+                      {{ new Intl.DateTimeFormat(language, {dateStyle:"full"}).format(new Date(selected.created.trim())) }}
+                    </div>
+                    <div v-else></div>
+                    <div class="languages">
+                      <div v-for="(name, id) in text?.metadata.language" :key="id" :class="{active:(selected?.language ?? language) === id, disabled:(selected?.translations)&&(!selected?.translations.includes(id)), missing:(selected?.language)&&(selected?.language !== language)}" @click="intl(id)">{{ name }}</div>
+                    </div>
+                  </div>
+                  <!-- Missing translation warning -->
+                  <article class="full warn" v-if="(selected?.language)&&(selected?.language !== language)">
+                    <div class="header">
+                      <div>
+                        <i>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M2.344 2.343h-.001a8 8 0 0 1 11.314 11.314A8.002 8.002 0 0 1 .234 10.089a8 8 0 0 1 2.11-7.746Zm1.06 10.253a6.5 6.5 0 1 0 9.108-9.275 6.5 6.5 0 0 0-9.108 9.275ZM6.03 4.97 8 6.94l1.97-1.97a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l1.97 1.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-1.97 1.97a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L6.94 8 4.97 6.03a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018Z"></path></svg>
+                        </i>
+                        <span v-html="markdown(text?.metadata.translations.missing.name)"></span>
+                      </div>
+                    </div>
+                    <div class="body">
+                      <div v-else v-html="markdown(text?.metadata.translations.missing.text)" class="text"></div>
+                    </div>
+                  </article>
+                  <!-- Content -->
+                  <article v-for="({name = '', content = '', size = 'full', type = 'text', icon = type, ...card}, i) in selected?.cards" :class="{[size]:true, [type]:(type === 'warn')||(type === 'placeholder'), fullscreen:(type === 'frame')&&(enabled[i])&&(card.fullscreen), overview:(selected.id === 'overview')&&(!card.entry?.hidden)}" :key="`${tab.id}-${selected.id}-${i}`" :style="{display:(card.hidden)&&(selected.id !== 'overview') ? 'none' : undefined, transition:`opacity var(--fade-animation) ease-in calc(${Math.min(i, 8)} * var(--fade-article-delay))`}" @click="(selected.id === 'overview')&&(!card.entry?.hidden) ? selected = card.entry : null">
+                    <!-- Content header -->
+                    <div class="header">
+                      <div>
+                        <i>
+                          <svg v-if="icon === 'about'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg>
+                          <svg v-else-if="icon === 'github'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                          <svg v-else-if="icon === 'media'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M1.75 2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h.94a.76.76 0 01.03-.03l6.077-6.078a1.75 1.75 0 012.412-.06L14.5 10.31V2.75a.25.25 0 00-.25-.25H1.75zm12.5 11H4.81l5.048-5.047a.25.25 0 01.344-.009l4.298 3.889v.917a.25.25 0 01-.25.25zm1.75-.25V2.75A1.75 1.75 0 0014.25 1H1.75A1.75 1.75 0 000 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0016 13.25zM5.5 6a.5.5 0 11-1 0 .5.5 0 011 0zM7 6a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                          <svg v-else-if="icon === 'frame'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M2 1.75C2 .784 2.784 0 3.75 0h8.5C13.216 0 14 .784 14 1.75v5a1.75 1.75 0 01-1.75 1.75h-8.5A1.75 1.75 0 012 6.75v-5zm1.75-.25a.25.25 0 00-.25.25v5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25v-5a.25.25 0 00-.25-.25h-8.5zM0 11.25c0-.966.784-1.75 1.75-1.75h12.5c.966 0 1.75.784 1.75 1.75v3A1.75 1.75 0 0114.25 16H1.75A1.75 1.75 0 010 14.25v-3zM1.75 11a.25.25 0 00-.25.25v3c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-3a.25.25 0 00-.25-.25H1.75z"></path><path fill-rule="evenodd" d="M3 12.75a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5a.75.75 0 01-.75-.75zm4 0a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75z"></path></svg>
+                          <svg v-else-if="icon === 'links'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg>
+                          <svg v-else-if="icon === 'snippet'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M1.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25V1.75a.25.25 0 00-.25-.25H1.75zM0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0114.25 16H1.75A1.75 1.75 0 010 14.25V1.75zm9.22 3.72a.75.75 0 000 1.06L10.69 8 9.22 9.47a.75.75 0 101.06 1.06l2-2a.75.75 0 000-1.06l-2-2a.75.75 0 00-1.06 0zM6.78 6.53a.75.75 0 00-1.06-1.06l-2 2a.75.75 0 000 1.06l2 2a.75.75 0 101.06-1.06L5.31 8l1.47-1.47z"></path></svg>
+                          <svg v-else-if="icon === 'warn'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8.22 1.754a.25.25 0 00-.44 0L1.698 13.132a.25.25 0 00.22.368h12.164a.25.25 0 00.22-.368L8.22 1.754zm-1.763-.707c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0114.082 15H1.918a1.75 1.75 0 01-1.543-2.575L6.457 1.047zM9 11a1 1 0 11-2 0 1 1 0 012 0zm-.25-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"></path></svg>
+                          <svg v-else-if="icon === 'pdf'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0114.25 15h-9a.75.75 0 010-1.5h9a.25.25 0 00.25-.25V6h-2.75A1.75 1.75 0 0110 4.25V1.5H5.75a.25.25 0 00-.25.25v2a.75.75 0 01-1.5 0v-2zm7.5-.188V4.25c0 .138.112.25.25.25h2.688a.252.252 0 00-.011-.013l-2.914-2.914a.272.272 0 00-.013-.011zM0 7.75C0 6.784.784 6 1.75 6h1.5C4.216 6 5 6.784 5 7.75v2.5A1.75 1.75 0 013.25 12h-1.5A1.75 1.75 0 010 10.25v-2.5zm1.75-.25a.25.25 0 00-.25.25v2.5c0 .138.112.25.25.25h1.5a.25.25 0 00.25-.25v-2.5a.25.25 0 00-.25-.25h-1.5zm5-1.5a.75.75 0 000 1.5h.75v3h-.75a.75.75 0 000 1.5h3a.75.75 0 000-1.5H9V6.75A.75.75 0 008.25 6h-1.5z"></path></svg>
+                          <svg v-else-if="icon === 'log'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M5 8.25a.75.75 0 01.75-.75h4a.75.75 0 010 1.5h-4A.75.75 0 015 8.25zM4 10.5A.75.75 0 004 12h4a.75.75 0 000-1.5H4z"></path><path fill-rule="evenodd" d="M13-.005H3a3 3 0 00-3 3c0 .676.224 1.254.603 1.722.526.65 1.331.783 1.907.783h1.177c-.364.662-.814 1.339-1.287 2.048-.205.309-.414.624-.623.946C.891 9.865 0 11.418 0 13a3 3 0 003 3h10a3 3 0 001.667-5.494.75.75 0 00-.834 1.246A1.5 1.5 0 1111.5 13c0-.642.225-1.347.623-2.136.397-.787.933-1.593 1.501-2.446l.011-.017c.554-.83 1.139-1.709 1.582-2.588.445-.885.783-1.836.783-2.818 0-1.672-1.346-3-3-3zm-10 1.5a1.5 1.5 0 00-1.5 1.5c0 .321.1.569.27.778.097.12.325.227.74.227h7.674A2.737 2.737 0 0110 2.995c0-.546.146-1.059.401-1.5H3zm10 0c.831 0 1.5.662 1.5 1.5 0 .646-.225 1.353-.623 2.143-.398.79-.933 1.595-1.501 2.448l-.017.026c-.552.828-1.134 1.702-1.575 2.576C10.338 11.072 10 12.021 10 13c0 .546.146 1.059.401 1.5H3A1.5 1.5 0 011.5 13c0-1.084.63-2.289 1.537-3.692.177-.274.366-.556.558-.845.632-.948 1.306-1.96 1.773-2.963h6.382a.75.75 0 00.417-1.373c-.444-.298-.667-.656-.667-1.132a1.5 1.5 0 011.5-1.5z"></path></svg>
+                          <svg v-else-if="icon === 'comment'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M1.5 2.75a.25.25 0 01.25-.25h8.5a.25.25 0 01.25.25v5.5a.25.25 0 01-.25.25h-3.5a.75.75 0 00-.53.22L3.5 11.44V9.25a.75.75 0 00-.75-.75h-1a.25.25 0 01-.25-.25v-5.5zM1.75 1A1.75 1.75 0 000 2.75v5.5C0 9.216.784 10 1.75 10H2v1.543a1.457 1.457 0 002.487 1.03L7.061 10h3.189A1.75 1.75 0 0012 8.25v-5.5A1.75 1.75 0 0010.25 1h-8.5zM14.5 4.75a.25.25 0 00-.25-.25h-.5a.75.75 0 110-1.5h.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0114.25 12H14v1.543a1.457 1.457 0 01-2.487 1.03L9.22 12.28a.75.75 0 111.06-1.06l2.22 2.22v-2.19a.75.75 0 01.75-.75h1a.25.25 0 00.25-.25v-5.5z"></path></svg>
+                          <svg v-else-if="type !== 'placeholder'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"></path></svg>
+                        </i>
+                        <span v-html="markdown((selected.id === 'overview')&&(card.entry?.name) ? `${card.entry.name} <span class='origin'>/ ${name}</span>` : name)"></span>
+                      </div>
+                      <div class="minimize" v-if="(enabled[i])&&(card.fullscreen)" @click="enabled[i] = false">
+                        {{ text?.controls.minimize }}
+                        <i>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M2.75 2.5h10.5a.25.25 0 01.25.25v10.5a.25.25 0 01-.25.25H2.75a.25.25 0 01-.25-.25V2.75a.25.25 0 01.25-.25zM13.25 1H2.75A1.75 1.75 0 001 2.75v10.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0015 13.25V2.75A1.75 1.75 0 0013.25 1zm-2 7.75a.75.75 0 000-1.5h-6.5a.75.75 0 000 1.5h6.5z"></path></svg>
+                        </i>
+                      </div>
+                    </div>
+                    <!-- Content body -->
+                    <div class="body" :class="{paddingless:(type === 'snippet')||(type === 'frame')||(card.paddingless)}">
+                      <!-- GitHub card -->
+                      <div v-if="type === 'github'" class="github">
+                        <div class="entry">
+                          <span>{{ text.repository.repository }}</span>
+                          <a v-if="card.repo" :href="`https://github.com/${card.repo}`" target="_blank">{{ card.repo?.split("/").slice(0, 2).join("/") ?? text.repository.link }}</a>
+                          <span v-else>N/A</span>
+                        </div>
+                        <div class="entry" v-if="card.documentation">
+                          <span>{{ text.repository.documentation }}</span>
+                          <span v-html="markdown(card.documentation)"></span>
+                        </div>
+                        <hr>
+                        <div class="entry"><span>{{ text.repository.language }}</span><span>{{ card.data?.language ?? "N/A" }}</span></div>
+                        <div class="entry"><span>{{ text.repository.commits }}</span><span>{{ card.data?.commits ?? "N/A" }}</span></div>
+                        <div class="entry"><span>{{ text.repository.stars }}</span><span>{{ card.data?.stargazers ?? "N/A" }}</span></div>
+                        <hr>
+                        <div class="entry"><span>{{ text.repository.created }}</span><span>{{ card.data?.created ? new Intl.DateTimeFormat(language, {day:"numeric", month:"long", year:"numeric"}).format(new Date(card.data?.created)) : "N/A" }}</span></div>
+                        <div class="entry"><span>{{ text.repository.updated }}</span><span>{{ card.data?.updated ? new Intl.DateTimeFormat(language, {day:"numeric", month:"long", year:"numeric"}).format(new Date(card.data?.updated)) : "N/A" }}</span></div>
+                        <div class="calendar"><div v-for="day in (card.data?.history ?? 14)" class="block" :class="{'filled':day === true}" :key="day"></div></div>
+                      </div>
+                      <!-- Media -->
+                      <div v-else-if="type === 'media'" class="media">
+                        <img v-if="card.image" src="/as/v4/images/placeholder.png" :data-src="card.image" class="lazy" alt="">
+                        <video v-else-if="card.video" poster="/as/v4/images/placeholder.png" :data-src="card.video" :data-poster="card.poster ?? ''" class="lazy" preload="metadata" autoplay loop muted playsinline disablepictureinpicture></video>
+                        <div v-else v-html="markdown(content)"></div>
+                      </div>
+                      <!-- Code snippet -->
+                      <div v-else-if="type === 'snippet'" class="snippet">
+                        <div class="wrapper" v-html="markdown(content)"></div>
+                      </div>
+                      <!-- Embed frame -->
+                      <div v-else-if="type === 'frame'" class="frame">
+                        <div v-if="card.lazy" class="wrapper enabled">
+                          <iframe :data-src="card.iframe" class="lazy" sandbox="allow-same-origin allow-scripts"></iframe>
+                        </div>
+                        <div v-else-if="enabled[i]" class="wrapper" :class="{enabled:enabled[i]}">
+                          <iframe :src="card.iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+                        </div>
+                        <div v-else @click="enabled[i] = true" class="wrapper">
+                          <div class="placeholder">
+                            <p v-html="markdown(`${text.placeholder.iframe.notice}${card.fullscreen ? text.placeholder.iframe.fullscreen : ''}`)"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- General -->
+                      <div v-else v-html="markdown(content)" class="text"></div>
+                      <div class="tags" v-if="(type === 'about')&&(selected?.id !== 'overview')">
+                        <div v-for="tag in selected?.tags" :key="tag">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M2.5 7.775V2.75a.25.25 0 01.25-.25h5.025a.25.25 0 01.177.073l6.25 6.25a.25.25 0 010 .354l-5.025 5.025a.25.25 0 01-.354 0l-6.25-6.25a.25.25 0 01-.073-.177zm-1.5 0V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 010 2.474l-5.026 5.026a1.75 1.75 0 01-2.474 0l-6.25-6.25A1.75 1.75 0 011 7.775zM6 5a1 1 0 100 2 1 1 0 000-2z"></path></svg>
+                          {{ tag }}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </transition-group>
+              </section>
+            </transition>
+          </template>
+          <template v-if="(loaded)&&(tab?.id === 'feed' || tab?.id === 'memory' || tab?.id === 'art' || tab?.id === 'resume' || tab?.id === 'social')" :key="tab?.id ?? 'content'">
+            <section class="extended" :class="{[tab.id]:true}">
+              <!-- Language selection and description -->
+              <div class="metadata" v-if="tab.id !== 'feed'">
+                <div></div>
+                <div class="languages">
+                  <div v-for="(name, id) in text?.metadata.language" :key="id" :class="{active:language === id}" @click="intl(id)">{{ name }}</div>
+                </div>
+              </div>
+              <!-- Feed -->
+              <template v-if="tab.id === 'feed'">
+                <div class="grid">
+                  <div class="profile">
+                    <div class="profile-card">
+                      <img src="/as/v4/images/placeholder.png" data-src="/@/medias/avatar/lowlighter.png" class="lazy avatar" alt="" width="150" height="150">
+                      <div class="name">Aditya Bhoj</div>
+                      <div class="life">
+                        <div class="bar"><div :style="{width:`${100*((new Date().getTime() - new Date(1996, 11).getTime())/24/60/60/1000)/(70*365)}%`}"></div></div>
+                      </div>
+                      <div class="name-alt">@Unlighter / @low.lighter</div>
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M1.75 16A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5c0 .085-.006.168-.018.25h2.268a.25.25 0 0 0 .25-.25V8.285a.25.25 0 0 0-.111-.208l-1.055-.703a.749.749 0 1 1 .832-1.248l1.055.703c.487.325.779.871.779 1.456v5.965A1.75 1.75 0 0 1 14.25 16h-3.5a.766.766 0 0 1-.197-.026c-.099.017-.2.026-.303.026h-3a.75.75 0 0 1-.75-.75V14h-1v1.25a.75.75 0 0 1-.75.75Zm-.25-1.75c0 .138.112.25.25.25H4v-1.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 .75.75v1.25h2.25a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25ZM3.75 6h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM3 3.75A.75.75 0 0 1 3.75 3h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 3.75Zm4 3A.75.75 0 0 1 7.75 6h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 7 6.75ZM7.75 3h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM3 9.75A.75.75 0 0 1 3.75 9h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 9.75ZM7.75 9h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5Z"></path></svg>
+                        OVHcloud
+                      </div>
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="m12.596 11.596-3.535 3.536a1.5 1.5 0 0 1-2.122 0l-3.535-3.536a6.5 6.5 0 1 1 9.192-9.193 6.5 6.5 0 0 1 0 9.193Zm-1.06-8.132v-.001a5 5 0 1 0-7.072 7.072L8 14.07l3.536-3.534a5 5 0 0 0 0-7.072ZM8 9a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 9Z"></path></svg>
+                        Canada (Québec) / France
+                      </div>
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"></path></svg>
+                        {{ new Intl.DateTimeFormat(language, {timeStyle:"short", timeZone:"Canada/Eastern"}).format(date) }}
+                      </div>
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M1.75 1h8.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 10.25 10H7.061l-2.574 2.573A1.458 1.458 0 0 1 2 11.543V10h-.25A1.75 1.75 0 0 1 0 8.25v-5.5C0 1.784.784 1 1.75 1ZM1.5 2.75v5.5c0 .138.112.25.25.25h1a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h3.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25Zm13 2a.25.25 0 0 0-.25-.25h-.5a.75.75 0 0 1 0-1.5h.5c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 14.25 12H14v1.543a1.458 1.458 0 0 1-2.487 1.03L9.22 12.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.22 2.22v-2.19a.75.75 0 0 1 .75-.75h1a.25.25 0 0 0 .25-.25Z"></path></svg>
+                        🇺🇸 <sub>C1</sub> / 🇫🇷 <sub>C2</sub> / 🇩🇪 <sub>B2</sub> <!-- / 🇨🇳 <sub>HSK2</sub> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="timeline">
+                    <article v-for="({name = '', type = 'text', content = '', ...card}, i) in timeline.entries">
+                      <div class="header">
+                        <div class="name">
+                          ■&nbsp;<span v-html="markdown(feed(name, language))"></span>
+                        </div>
+                        <div class="metadata" v-if="typeof name === 'object'">
+                          <div class="languages">
+                            <div v-for="(lang, id) in text?.metadata.language" :key="id" :class="{active:((language === id)&&(Object.keys(name).includes(id))||((Object.keys(name).length === 1)&&(Object.keys(name).includes(id)))), disabled:!Object.keys(name).includes(id)}" @click="intl(id)">{{ lang }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="header">
+                        <div class="date" v-if="card.created">
+                          {{ new Intl.DateTimeFormat(language, {dateStyle:"full"}).format(new Date(card.created.trim())) }}
+                        </div>
+                      </div>
+                      <div class="header warn" v-if="(typeof name === 'object')&&(!Object.keys(name).includes(language))">
+                        <div class="text" v-html="markdown(text?.metadata.translations.unavailable.text)"></div>
+                      </div>
+                      <div class="body" :class="{paddingless:(type === 'media')||(type === 'snippet')}">
+                        <!-- Media -->
+                        <div v-if="type === 'media'" class="media">
+                          <img v-if="card.image" src="/as/v4/images/placeholder.png" :data-src="card.image" class="lazy" alt="">
+                          <video v-else-if="card.video" poster="/as/v4/images/placeholder.png" :data-src="card.video" :data-poster="card.poster ?? ''" class="lazy" preload="metadata" autoplay loop muted playsinline disablepictureinpicture></video>
+                          <iframe v-else-if="card.music" class="lazy" width="100" height="100" :data-src="card.music" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+                          <div v-else v-html="markdown(feed(content, language))"></div>
+                        </div>
+                        <!-- Code snippet -->
+                        <div v-else-if="type === 'snippet'" class="snippet">
+                          <div class="wrapper" v-html="markdown(feed(content, language))"></div>
+                        </div>
+                        <!-- General -->
+                        <div v-else v-html="markdown(feed(content, language))" class="text"></div>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </template>
+              <!-- Memory -->
+              <template v-if="tab.id === 'memory'">
+                <article class="about">
+                  <div class="body" v-html="markdown(memory.about)"></div>
+                </article>
+                <article class="about warn">
+                  <div class="header">
+                    <div>
+                      <i>
+                        <svg v-else-if="icon === 'warn'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8.22 1.754a.25.25 0 00-.44 0L1.698 13.132a.25.25 0 00.22.368h12.164a.25.25 0 00.22-.368L8.22 1.754zm-1.763-.707c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0114.082 15H1.918a1.75 1.75 0 01-1.543-2.575L6.457 1.047zM9 11a1 1 0 11-2 0 1 1 0 012 0zm-.25-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"></path></svg>
+                      </i>
+                      <span v-html="markdown(memory.warning.name)"></span>
+                    </div>
+                  </div>
+                  <div class="body">
+                    <div v-else v-html="markdown(memory.warning.content)" class="text"></div>
+                  </div>
+                </article>
+                <div class="links">
+                  <transition-group name="fade" appear>
+                    <a v-for="({url, type, name, background}, i) in memory.links" :key="name" :href="url" :style="{transitionDelay: `calc(${i} * var(--fade-link-delay))`}" target="_blank">
+                      <article>
+                        <div class="header">
+                          <i>
+                            <svg v-if="type === 'music'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M1.5 8a6.5 6.5 0 0113 0A.75.75 0 0016 8a8 8 0 10-8 8 .75.75 0 000-1.5A6.5 6.5 0 011.5 8z"></path><path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm1.5 1.75a.75.75 0 01.75-.75h5a.75.75 0 010 1.5h-5a.75.75 0 01-.75-.75zm2.75 2.25a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z"></path></svg>
+                            <svg v-else-if="(type === 'book')||(type === 'manga')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 11-1.072 1.05A2.495 2.495 0 012 11.5zm10.5-1h-8a1 1 0 00-1 1v6.708A2.486 2.486 0 014.5 9h8zM5 12.25a.25.25 0 01.25-.25h3.5a.25.25 0 01.25.25v3.25a.25.25 0 01-.4.2l-1.45-1.087a.249.249 0 00-.3 0L5.4 15.7a.25.25 0 01-.4-.2z"></path></svg>
+                            <svg v-else-if="(type === 'movie')||(type === 'serie')||(type === 'anime')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M16 3.75v8.5a.75.75 0 01-1.136.643L11 10.575v.675A1.75 1.75 0 019.25 13h-7.5A1.75 1.75 0 010 11.25v-6.5C0 3.784.784 3 1.75 3h7.5c.966 0 1.75.784 1.75 1.75v.675l3.864-2.318A.75.75 0 0116 3.75zm-6.5 1a.25.25 0 00-.25-.25h-7.5a.25.25 0 00-.25.25v6.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-6.5zM11 8.825l3.5 2.1v-5.85l-3.5 2.1z"></path></svg>
+                            <svg v-else-if="type === 'game'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0114.25 15H1.75A1.75 1.75 0 010 13.25zM14.5 6h-13v7.25c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25zm-6-3.5v2h6V2.75a.25.25 0 00-.25-.25zM5 2.5v2h2v-2zm-3.25 0a.25.25 0 00-.25.25V4.5h2v-2z"></path></svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M4 5.75C4 4.784 4.784 4 5.75 4h4.5c.966 0 1.75.784 1.75 1.75v4.5A1.75 1.75 0 0110.25 12h-4.5A1.75 1.75 0 014 10.25zm1.75-.25a.25.25 0 00-.25.25v4.5c0 .138.112.25.25.25h4.5a.25.25 0 00.25-.25v-4.5a.25.25 0 00-.25-.25z"></path></svg>
+                          </i>
+                          {{ name }}
+                        </div>
+                        <div class="body lazy" :data-bg="background"></div>
+                      </article>
+                    </a>
+                  </transition-group>
+                </div>
+                </div>
+              </template>
+              <!-- Resume -->
+              <template v-else-if="tab.id === 'resume'">
+                <article class="about">
+                  <div class="header">
+                    <div>
+                      <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M4.75 7a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5zM5 4.75A.75.75 0 015.75 4h5.5a.75.75 0 010 1.5h-5.5A.75.75 0 015 4.75zM6.75 10a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5z"></path><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0114.25 16H1.75A1.75 1.75 0 010 14.25zm1.75-.25a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25V1.75a.25.25 0 00-.25-.25z"></path></svg>
+                      </i>
+                      <span>{{ current }}</span>
+                    </div>
+                    <a class="maximize" href="/resume" target="_blank">
+                      {{ text?.controls.external }}
+                      <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M10.5 3a.75.75 0 01.75.75v1h1a.75.75 0 010 1.5h-1v1a.75.75 0 01-1.5 0v-1h-1a.75.75 0 010-1.5h1v-1A.75.75 0 0110.5 3z"></path><path d="M6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5C5 .784 5.784 0 6.75 0zM6.5 1.75v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5a.25.25 0 00-.25.25z"></path><path d="M1.75 5A1.75 1.75 0 000 6.75v7.5C0 15.216.784 16 1.75 16h7.5A1.75 1.75 0 0011 14.25v-1.5a.75.75 0 00-1.5 0v1.5a.25.25 0 01-.25.25h-7.5a.25.25 0 01-.25-.25v-7.5a.25.25 0 01.25-.25h1.5a.75.75 0 000-1.5h-1.5z"></path></svg>
+                      </i>
+                    </a>
+                  </div>
+                  <div class="body paddingless">
+                    <div class="frame">
+                      <div class="wrapper">
+                        <div class="placeholder">
+                          <p v-html="markdown(resume.placeholder)"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </template>
+              <!-- Art -->
+              <template v-else-if="tab.id === 'art'">
+                <article class="about">
+                  <div class="body" v-html="markdown(art.about)"></div>
+                </article>
+                <!-- Content -->
+                <section>
+                  <transition-group name="fade" appear>
+                    <article v-for="({name = '', path = '/as/v4/images/placeholder.png', ...card}, i) in gallery" :class="{fullscreen:enabled[i]}" :key="`${tab.id}-${i}`" :style="{display:card.hidden ? 'none' : undefined, transition:`opacity var(--fade-animation) ease-in calc(${Math.min(i, 8)} * var(--fade-article-delay))`}">
+                      <div class="header">
+                        <div>
+                          <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M1.75 2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h.94a.76.76 0 01.03-.03l6.077-6.078a1.75 1.75 0 012.412-.06L14.5 10.31V2.75a.25.25 0 00-.25-.25H1.75zm12.5 11H4.81l5.048-5.047a.25.25 0 01.344-.009l4.298 3.889v.917a.25.25 0 01-.25.25zm1.75-.25V2.75A1.75 1.75 0 0014.25 1H1.75A1.75 1.75 0 000 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0016 13.25zM5.5 6a.5.5 0 11-1 0 .5.5 0 011 0zM7 6a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                          </i>
+                          <span>
+                            <span v-html="markdown(name[language])"></span>
+                            <span>
+                              · {{ new Intl.DateTimeFormat(language, {dateStyle:"medium"}).format(new Date(card.created.trim())) }}
+                            </span>
+                          </span>
+                        </div>
+                        <div class="minimize" v-if="enabled[i]" @click="enabled[i] = false">
+                          {{ text?.controls.minimize }}
+                          <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M2.75 2.5h10.5a.25.25 0 01.25.25v10.5a.25.25 0 01-.25.25H2.75a.25.25 0 01-.25-.25V2.75a.25.25 0 01.25-.25zM13.25 1H2.75A1.75 1.75 0 001 2.75v10.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0015 13.25V2.75A1.75 1.75 0 0013.25 1zm-2 7.75a.75.75 0 000-1.5h-6.5a.75.75 0 000 1.5h6.5z"></path></svg>
+                          </i>
+                        </div>
+                      </div>
+                      <div class="body paddingless" @click="enabled[i] = true">
+                        <div class="media">
+                          <img src="/as/v4/images/placeholder.png" :data-src="path" class="lazy" alt="">
+                        </div>
+                      </div>
+                    </article>
+                  </transition-group>
+                </section>
+              </template>
+              <!-- Social -->
+              <template v-else-if="tab.id === 'social'">
+                <article class="about">
+                  <div class="body" v-html="markdown(social.about)"></div>
+                </article>
+                <div class="links">
+                  <transition-group name="fade" appear>
+                    <a v-for="({id, url, name, encoded, disabled}, i) in social.links" :key="id" :href="encoded ? atob(atob(url)) : url" :class="{disabled}" :style="{transitionDelay: `calc(${i} * var(--fade-link-delay))`}" target="_blank">
+                      <article>
+                        <div class="header">{{ name }}</div>
+                        <div class="body">
+                          <svg v-if="id === 'github'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path class="fill" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16 1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67 0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18 24 18 48l-1 70c0 6 3 12 16 12z"/>
+                          </svg>
+                          <svg v-else-if="id === 'twitter'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#1DA1F2" d="M437 152a72 72 0 01-40 12a72 72 0 0032-40a72 72 0 01-45 17a72 72 0 00-122 65a200 200 0 01-145-74a72 72 0 0022 94a72 72 0 01-32-7a72 72 0 0056 69a72 72 0 01-32 1a72 72 0 0067 50a200 200 0 01-105 29a200 200 0 00309-179a200 200 0 0035-37"/>
+                          </svg>
+                          <svg v-else-if="id === 'linkedin'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <circle fill="#0077B5" cx="142" cy="138" r="37"/>
+                            <path stroke="#0077B5" stroke-width="66" d="M244 194v198M142 194v198"/>
+                            <path fill="#0077B5" d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32"/>
+                          </svg>
+                          <svg v-else-if="id === 'facebook'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="M355.6 330l11.4-74h-71v-48c0-20.2 9.9-40 41.7-40H370v-63s-29.3-5-57.3-5c-58.5 0-96.7 35.4-96.7 99.6V256h-65v74h65v182h80V330h59.6z" fill="#1877f2"/>
+                          </svg>
+                          <svg v-else-if="id === 'messenger'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#0093FF" d="M256 78.2c-102.4 0-181.8 75 -181.8 176.4c0 53 21.7 98.8 57 130.4a14.7 14.7 0 015 10.4l1 32.3a14.6 14.6 0 0020.4 12.9l36-16a14.5 14.5 0 019.8-.7a197.8 197.8 0 0052.6 7c102.4 0 181.8-75 181.8 -176.3S358.4 78.2 256 78.2z"/>
+                            <path fill="#FFFFFF" d="M146.8 306.1l53.4-84.7a27.3 27.3 0 0139.5-7.3l42.5 31.9a11 11 0 0013 0l57.5-43.6c7.6-5.8 17.6 3.4 12.5 11.5l-53.4 84.7a27.3 27.3 0 01-39.4 7.3L229.9 274a11 11 0 00-13.2 0l-57.4 43.6c-7.6 5.8-17.6 -3.4 -12.5 -11.5z"/>
+                          </svg>
+                          <svg v-else-if="id === 'whatsapp'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#25d366" stroke="#fff" stroke-width="26" d="M123 393l14-65a138 138 0 1150 47z"/>
+                            <path fill="#fff" d="M308 273c-3-2-6-3-9 1l-12 16c-3 2-5 3-9 1-15-8-36-17-54-47-1-4 1-6 3-8l9-14c2-2 1-4 0-6l-12-29c-3-8-6-7-9-7h-8c-2 0-6 1-10 5-22 22-13 53 3 73 3 4 23 40 66 59 32 14 39 12 48 10 11-1 22-10 27-19 1-3 6-16 2-18"/>
+                          </svg>
+                          <svg v-else-if="id === 'wechat'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#00C70A" d="M402 369c23-17 38 -42 38 -70c0-51 -50 -92 -111 -92s-110 41-110 92s49 92 110 92c13 0 25-2 36 -5c4-1 8 0 9 1l25 14c3 2 6 0 5-4l-6-22c0-3 2 -5 4 -6m-110-85a15 15 0 110-29a15 15 0 010 29m74 0a15 15 0 110-29a15 15 0 010 29"/>
+                            <path fill="#00C70A" d="m205 105c-73 0-132 50-132 111 0 33 17 63 45 83 3 2 5 5 4 10l-7 24c-1 5 3 7 6 6l30-17c3-2 7-3 11-2 26 8 48 6 51 6-24-84 59-132 123-128-10-52-65-93-131-93m-44 93a18 18 0 1 1 0-35 18 18 0 0 1 0 35m89 0a18 18 0 1 1 0-35 18 18 0 0 1 0 35"/>
+                          </svg>
+                          <svg v-else-if="id === 'discord'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#5865f2" d="m386 137c-24-11-49.5-19-76.3-23.7c-.5 0-1 0-1.2.6c-3.3 5.9-7 13.5-9.5 19.5c-29-4.3-57.5-4.3-85.7 0c-2.6-6.2-6.3-13.7-10-19.5c-.3-.4-.7-.7-1.2-.6c-23 4.6-52.4 13-76 23.7c-.2 0-.4.2-.5.4c-49 73-62 143-55 213c0 .3.2.7.5 1c32 23.6 63 38 93.6 47.3c.5 0 1 0 1.3-.4c7.2-9.8 13.6-20.2 19.2-31.2c.3-.6 0-1.4-.7-1.6c-10-4-20-8.6-29.3-14c-.7-.4-.8-1.5 0-2c2-1.5 4-3 5.8-4.5c.3-.3.8-.3 1.2-.2c61.4 28 128 28 188 0c.4-.2.9-.1 1.2.1c1.9 1.6 3.8 3.1 5.8 4.6c.7.5.6 1.6 0 2c-9.3 5.5-19 10-29.3 14c-.7.3-1 1-.6 1.7c5.6 11 12.1 21.3 19 31c.3.4.8.6 1.3.4c30.6-9.5 61.7-23.8 93.8-47.3c.3-.2.5-.5.5-1c7.8-80.9-13.1-151-55.4-213c0-.2-.3-.4-.5-.4Zm-192 171c-19 0-34-17-34-38c0-21 15-38 34-38c19 0 34 17 34 38c0 21-15 38-34 38zm125 0c-19 0-34-17-34-38c0-21 15-38 34-38c19 0 34 17 34 38c0 21-15 38-34 38z"/>
+                          </svg>
+                          <svg v-else-if="id === 'devto'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#fff" d="m140.5 203.9h-17.4v104.5h17.4c10.2-0.5 17.4-8.7 17.5-17.4v-69.7c-0.7-10.4-7.8-17.3-17.5-17.4zm45.7 87.2c0 18.8-11.6 47.3-48.4 47.2h-46.4v-165.3h47.4c35.4 0 47.4 28.5 47.4 47.3zm100.7-88.7h-53.3v38.4h32.6v29.6h-32.6v38.4h53.3v29.6h-62.2c-11.2 0.3-20.4-8.5-20.7-19.7v-125c-0.3-11.2 8.6-20.4 19.7-20.7h63.2zm103.6 115.3c-13.2 30.8-36.9 24.6-47.4 0l-38.5-144.8h32.6l29.7 113.7 29.6-113.7h32.6z"/>
+                          </svg>
+                          <svg v-else-if="id === 'instagram'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <g fill="none" stroke-width="30" stroke="#943FB0">
+                              <rect width="308" height="308" x="102" y="102" rx="81"/>
+                              <circle cx="256" cy="256" r="72"/>
+                              <circle cx="347" cy="165" r="6"/>
+                            </g>
+                          </svg>
+                          <svg v-else-if="id === 'mail'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#f2f2f2" d="M120 392V151.075h272V392"/>
+                            <path fill-opacity=".05" d="M256 285L120 392l-4-212"/>
+                            <path fill="#d54c3f" d="M120 392H97c-12 0-22-10-22-23V143h45z"/>
+                            <path fill-opacity=".08" d="M317 392h77V159H82"/>
+                            <path fill="#f2f2f2" d="M97 121h318L256 234"/>
+                            <path fill="#b63524" d="M392 392h23c12 0 22-10 22-23V143h-45z"/>
+                            <path fill="none" stroke="#de5145" stroke-linecap="round" stroke-width="44" d="M97 143l159 115 159-115"/>
+                          </svg>
+                          <svg v-else-if="id === 'npm'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="none" stroke="#cb3837" stroke-width="22" d="m234 311h213v-112H65v112h113V210m-12 123h90M133 232v68m112-68v45m45-67v90m67-68v68m45-68v68"/>
+                          </svg>
+                          <svg v-else-if="id === 'rootme'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595.3 595.3">
+                            <g transform="matrix(1.8928864,0,0,1.8928864,-264.72593,-165.92773)">
+                              <path d="m 299.2,319.9 c 0,0 0,0 0,0 -0.1,-0.1 -0.2,-0.2 -0.2,-0.3 -0.1,-0.1 -0.1,-0.1 -0.2,-0.2 0,0 0,0 0,0 -0.1,0 -0.1,-0.1 -0.2,-0.1 -0.1,-0.1 -0.2,-0.1 -0.3,-0.2 -0.1,0 -0.2,-0.1 -0.3,-0.1 -0.1,0 -0.2,-0.1 -0.2,-0.1 -0.1,0 -0.2,0 -0.3,-0.1 -0.1,0 -0.2,0 -0.3,0 -0.1,0 -0.2,0 -0.3,0 -0.1,0 -0.2,0 -0.3,0 -0.1,0 -0.2,0 -0.3,0 -0.1,0 -0.2,0 -0.3,0.1 -0.1,0 -0.2,0.1 -0.2,0.1 -0.1,0 -0.2,0.1 -0.3,0.1 -0.1,0 -0.2,0.1 -0.3,0.2 -0.1,0 -0.1,0.1 -0.2,0.1 0,0 0,0 0,0 -0.1,0.1 -0.1,0.1 -0.2,0.2 -0.1,0.1 -0.2,0.2 -0.2,0.2 0,0 0,0 0,0 l -8.1,10.1 c -1,1.3 -0.8,3.1 0.5,4.1 0.5,0.4 1.2,0.6 1.8,0.6 0.9,0 1.7,-0.4 2.3,-1.1 l 0.1,-0.1 c 3,-3.7 8.6,-3.7 11.5,0 l 0.1,0.1 c 0.6,0.7 1.4,1.1 2.3,1.1 0.6,0 1.3,-0.2 1.8,-0.6 1.3,-1 1.5,-2.9 0.5,-4.1 z"/>
+                              <path d="m 285.7,149.1 c -4.1,0 -7.5,3.2 -7.7,7.3 l -15.3,5.6 c -0.8,0.3 -1.4,1 -1.4,1.9 v 9.7 H 249 c -0.9,-3.3 -3.8,-5.7 -7.4,-5.7 -4.2,0 -7.7,3.4 -7.7,7.7 0,4.2 3.4,7.7 7.7,7.7 3.6,0 6.5,-2.4 7.4,-5.7 h 14.3 c 1.1,0 2,-0.9 2,-2 v -10.3 l 13.5,-5 c 1.3,2.5 3.9,4.2 6.8,4.2 4.2,0 7.7,-3.4 7.7,-7.7 0.1,-4.2 -3.4,-7.7 -7.6,-7.7 z"/>
+                              <path fill="#9d9d9c" d="m 269.5,292.3 c -2.5,-0.9 -4.9,-1.8 -7.2,-2.8 -1.7,-0.8 -3.4,-1.6 -5,-2.4 3.8,3.8 13,10.6 22.9,10.8 0.6,-0.7 1.1,-1.4 1.5,-2.3 -1.5,-0.3 -3,-0.6 -4.5,-1 -2.7,-0.7 -5.2,-1.4 -7.7,-2.3 z" />
+                              <path d="m 395,222.5 c 0,-4.7 -0.3,-9.4 -1,-13.9 0,-0.3 -0.1,-0.6 -0.1,-0.9 -6.1,-39.7 -36.2,-72.3 -75.8,-81 -1,-4.5 -5,-7.9 -9.8,-7.9 -5.6,0 -10.1,4.5 -10.1,10.1 0,4.8 3.4,8.8 7.9,9.8 v 36.9 c 0,0.6 0.3,1.2 0.8,1.6 0.3,0.2 0.7,0.3 1.1,0.3 0.2,0 0.5,0 0.7,-0.1 l 14.8,-5.6 c 1,1.5 2.5,2.5 4.3,3 v 17.4 c -7.5,9.2 -16.8,17.5 -26.7,24.9 l -11.3,-26.2 c 2.1,-1.4 3.5,-3.7 3.5,-6.4 0,-4.2 -3.4,-7.7 -7.7,-7.7 -4.2,0 -7.7,3.4 -7.7,7.7 0,4.2 3.4,7.7 7.7,7.7 0.1,0 0.3,0 0.4,0 l 11.8,27.3 c -6.9,5 -14,9.5 -21,13.6 L 243.2,223 c -0.4,-0.1 -0.8,-0.1 -1.2,0.1 l -10,3.9 c -1.4,-1.9 -3.6,-3.1 -6.2,-3.1 -4.2,0 -7.7,3.4 -7.7,7.7 0,4.2 3.4,7.7 7.7,7.7 4.2,0 7.7,-3.4 7.7,-7.7 0,-0.3 -0.1,-0.6 -0.1,-0.9 l 9.4,-3.7 29.3,8.8 c -25,14 -47.4,22.1 -51.1,23.4 l -1.8,0.6 c -1.6,-1.2 -3.6,-1.9 -5.8,-1.9 -0.1,0 -0.2,0 -0.3,0 -4.7,-11.1 -7.1,-23.2 -7.1,-35.3 0,-6 0.6,-11.9 1.7,-17.6 h 43.9 c 0.9,3.3 3.8,5.7 7.4,5.7 4.2,0 7.7,-3.4 7.7,-7.7 0,-4.2 -3.4,-7.7 -7.7,-7.7 -3.6,0 -6.5,2.4 -7.4,5.7 h -43 c 8.1,-32.9 34.1,-59.2 67.7,-67 1.8,2.9 5,4.9 8.6,4.9 5.6,0 10.1,-4.5 10.1,-10.1 0,-5.6 -4.5,-10.1 -10.1,-10.1 -4.9,0 -8.9,3.5 -9.9,8 -44.1,10 -76.4,49.7 -76.4,95.7 0,13.1 2.6,26.2 7.7,38.2 -1.9,1.8 -3,4.4 -3,7.2 0,4.5 2.9,8.2 6.9,9.6 v 39.4 c 0,0.7 0.2,1.4 0.6,2 l 2.2,1.5 29.9,21.1 v 25.2 c 0,2.1 1.7,3.8 3.8,3.8 h 100 c 2.1,0 3.8,-1.7 3.8,-3.8 v -25.2 l 30,-21.1 2.2,-1.6 c 0.4,-0.6 0.6,-1.3 0.6,-2 V 277 c 3.7,-1.5 6.3,-5.1 6.3,-9.3 0,-2.6 -1,-5 -2.6,-6.8 5.3,-11.9 8,-25.1 8,-38.4 z M 281.4,125.6 c 0.9,-1 2.2,-1.6 3.6,-1.6 2.7,0 4.9,2.2 4.9,4.9 0,2.7 -2.2,4.9 -4.9,4.9 -1,0 -1.9,-0.3 -2.7,-0.8 -1.3,-0.9 -2.2,-2.4 -2.2,-4 0,-1.4 0.5,-2.6 1.3,-3.4 z m 22,3.2 c 0,-2.7 2.2,-4.9 4.9,-4.9 1.4,0 2.6,0.6 3.5,1.5 0.8,0.9 1.3,2 1.3,3.3 0,1.6 -0.8,3.1 -2.1,4 -0.8,0.6 -1.7,0.9 -2.8,0.9 -2.6,0.1 -4.8,-2.1 -4.8,-4.8 z m 18.8,38.5 c 0,0.3 0.1,0.5 0.1,0.7 l -12.2,4.6 v -34 c 3,-0.5 5.5,-2.3 6.9,-4.8 10.7,2.4 20.7,6.7 29.6,12.6 -0.1,14.8 -5.8,28.4 -14.8,40.7 v -12.4 c 3.3,-0.9 5.7,-3.8 5.7,-7.4 0,-4.2 -3.4,-7.7 -7.7,-7.7 -4.2,0.1 -7.6,3.5 -7.6,7.7 z M 213.5,272.7 c -1.2,0 -2.3,-0.5 -3.2,-1.2 -1,-0.9 -1.7,-2.2 -1.7,-3.6 0,-0.6 0.1,-1.2 0.3,-1.7 0.7,-1.8 2.5,-3.1 4.5,-3.1 0.9,0 1.7,0.3 2.4,0.7 1.4,0.8 2.4,2.4 2.4,4.2 0,0.9 -0.3,1.7 -0.7,2.4 -0.7,1.4 -2.2,2.3 -4,2.3 z m 170,-1.9 c -0.9,1.1 -2.3,1.9 -3.8,1.9 -1.4,0 -2.6,-0.6 -3.5,-1.5 -0.8,-0.9 -1.3,-2 -1.3,-3.3 0,-2.1 1.3,-3.9 3.2,-4.5 0.5,-0.2 1.1,-0.3 1.7,-0.3 2.3,0 4.3,1.7 4.8,3.9 0.1,0.3 0.1,0.6 0.1,1 -0.2,1 -0.6,2 -1.2,2.8 z m -3,-13 c -0.3,0 -0.6,0 -0.9,0 -5.6,0 -10.1,4.5 -10.1,10.1 0,4.3 2.7,8 6.6,9.4 v 36.8 l -31.5,22.2 c -1,0.7 -1.6,1.9 -1.6,3.1 v 21.2 c 0,1.2 -1,2.2 -2.2,2.2 h -11.7 c -1.2,0 -2.2,-1 -2.2,-2.2 V 353 c 0,-2 -1.4,-3.8 -3.4,-4 -2.3,-0.2 -4.2,1.6 -4.2,3.8 v 7.9 c 0,1.2 -1,2.2 -2.2,2.2 h -14.3 c -1.2,0 -2.2,-1 -2.2,-2.2 V 349 c 0,-2 -1.4,-3.8 -3.4,-4 -2.3,-0.2 -4.2,1.6 -4.2,3.8 v 12 c 0,1.2 -1,2.2 -2.2,2.2 h -14.3 c -1.2,0 -2.2,-1 -2.2,-2.2 V 353 c 0,-2 -1.4,-3.8 -3.4,-4 -2.3,-0.2 -4.2,1.6 -4.2,3.8 v 7.9 c 0,1.2 -1,2.2 -2.2,2.2 h -11.7 c -1.2,0 -2.2,-1 -2.2,-2.2 v -21.2 c 0,-1.2 -0.6,-2.4 -1.6,-3.1 L 217.6,314.2 V 277 c 3.5,-1.6 5.9,-5.1 5.9,-9.2 0,-0.6 -0.1,-1.2 -0.2,-1.8 4,-1.4 34.5,-12.3 64.5,-31 40.6,-25.3 63.1,-54 65.7,-83.5 17.5,14.1 29.6,34.5 33.1,57.4 -0.5,50.1 -87.8,81 -88.7,81.3 -0.2,0.1 -0.7,0.2 -1.1,0.4 -1.1,-0.2 -2.2,-0.4 -3.4,-0.6 -0.8,-0.2 -1.7,-0.3 -2.5,-0.5 -1.3,-0.2 -2.6,-0.5 -3.9,-0.8 -0.2,-0.1 -0.5,-0.1 -0.7,-0.1 -0.5,-0.1 -1,-0.2 -1.5,-0.3 -0.6,-0.1 -1.2,-0.3 -1.8,-0.4 -1.4,-0.3 -2.8,-0.6 -4.1,-1 -2.5,-0.6 -4.9,-1.3 -7.3,-1.9 -2.3,-0.7 -4.7,-1.3 -6.9,-2 -0.1,0 -0.1,0 -0.2,0 -1.7,-0.5 -3.3,-1 -4.9,-1.6 -0.5,-0.2 -1.1,-0.4 -1.6,-0.5 -0.8,-0.3 -1.5,-0.5 -2.2,-0.7 -1.3,-0.4 -2.5,-0.8 -3.6,-1.3 0,0 -0.1,0 -0.1,0 -1.8,-0.6 -3.4,-1.2 -4.8,-1.8 -1.5,-0.6 -2.8,-1.1 -3.8,-1.5 -1,-0.5 -1.9,-0.8 -2.4,-1.1 -0.6,-0.3 -0.9,-0.4 -0.9,-0.4 0,0 0.2,0.3 0.6,0.7 0.4,0.5 1,1.2 1.9,2 0.8,0.8 1.9,1.8 3.2,2.8 1.3,1 2.8,2.1 4.4,3.2 0,0 0,0 0.1,0 -0.6,2 -1,4.2 -1,6.4 0,11.5 9.4,20.9 20.9,20.9 8.9,0 16.5,-5.6 19.5,-13.5 1,0.1 2.1,0.2 3.1,0.3 1.8,0.1 3.5,0.1 5.1,0.1 0.1,0 0.2,0.1 0.3,0.1 l 16.9,17.2 c 4.3,4.3 11,5 16,1.7 l 26.4,-14.8 c 2.3,-1.5 3.8,-4.1 3.8,-6.9 v -30.4 c 10.2,-8.1 19.4,-17.7 25.4,-28.6 -1.1,7.9 -3.2,15.4 -6.3,22.5 z m -98.8,37.8 c -0.4,0.8 -1,1.6 -1.5,2.3 v 0 c -2.4,2.8 -6,4.6 -10,4.6 -4,0 -7.6,-1.8 -10,-4.6 -2,-2.3 -3.1,-5.3 -3.1,-8.5 0,-0.8 0.1,-1.5 0.2,-2.3 0,0 0,0 0,0 1.6,0.8 3.3,1.6 5,2.4 2.3,1 4.7,2 7.2,2.8 2.5,0.9 5.1,1.6 7.7,2.3 1.5,0.4 3,0.7 4.5,1 z"/>
+                            </g>
+                          </svg>
+                          <svg v-else-if="id === 'codingame'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2083 2083" style="border-radius: 50%;">
+                            <path d="M0 0h2083v2083H0z" fill="#fcd207"/>
+                            <g fill="#1f2528">
+                              <path d="M0 1636c411.554-97.771 692.897-283.177 724-637 10.714-131.212 67.364-243.777 216-319 207.675-80.617 305.728-52.164 390-10 92.668 81.722 119.468 199.94 50 371.5-31.914 100.266-291.001 223.867-410 258.5-392.539 175.893-595.504 430.282-561 783H0z"/>
+                              <ellipse cx="1666.5" cy="408" rx="196.5" ry="192"/>
+                            </g>
+                          </svg>
+                          <svg v-else-if="id === 'leetcode'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 94 111">
+                            <g>
+                              <path d="M67.5068339,83.0664138 C70.0005384,80.5763786 74.0371402,80.5828822 76.5228362,83.0809398 C79.0085322,85.5789975 79.00204,89.6226456 76.5083355,92.1126808 L65.4351451,103.169577 C55.2192332,113.370744 38.5604663,113.518673 28.1722578,103.513204 C28.112217,103.455678 23.486583,98.9201326 8.22702585,83.9570195 C-1.92478479,74.0028895 -2.93614945,58.0748736 6.61697549,47.8463644 L24.4286944,28.7745461 C33.9100043,18.6218594 51.3874487,17.5122246 62.2279907,26.2789232 L78.4052912,39.3620235 C81.1448956,41.5776292 81.5728103,45.5984975 79.3610655,48.3428842 C77.1493207,51.0872709 73.1354592,51.5159327 70.3958548,49.300327 L54.2186634,36.2173149 C48.5492813,31.6325105 38.631911,32.2621597 33.7398535,37.5006265 L15.9279056,56.5726899 C11.2772073,61.552182 11.7865613,69.5740156 17.1461283,74.8292186 C28.3515339,85.8169393 36.9874071,94.2846214 36.9973988,94.294225 C42.3981571,99.4959838 51.130862,99.418438 56.43358,94.1233737 L67.5068339,83.0664138 Z" fill="#FFA116" fill-rule="nonzero"/>
+                              <path d="M40.6069914,72.0014117 C37.086019,72.0014117 34.2317068,69.142117 34.2317068,65.6149982 C34.2317068,62.0878794 37.086019,59.2285847 40.6069914,59.2285847 L87.6247154,59.2285847 C91.1456879,59.2285847 94,62.0878794 94,65.6149982 C94,69.142117 91.1456879,72.0014117 87.6247154,72.0014117 L40.6069914,72.0014117 Z" fill="#B3B3B3"/>
+                              <path d="M49.4124315,2.02335002 C51.8178981,-0.552320454 55.852269,-0.686893945 58.4234511,1.72277172 C60.9946333,4.13243738 61.1289722,8.17385083 58.7235056,10.7495213 L15.9282277,56.5728697 C11.2773659,61.551984 11.7867168,69.5737689 17.1459309,74.8291832 L36.9094236,94.2091099 C39.4255514,96.6764051 39.4686234,100.719828 37.0056277,103.240348 C34.5426319,105.760868 30.5062548,105.804016 27.990127,103.33672 L8.22654289,83.9567041 C-1.92467414,74.0021005 -2.93603527,58.0741402 6.61751533,47.846311 L49.4124315,2.02335002 Z" fill="#FFFFFF"/>
+                            </g>
+                          </svg>
+                          <svg v-else-if="id === 'anilist'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 172">
+                            <g>
+                              <path fill="#02a9ff" d="M111.322,111.157 L111.322,41.029 C111.322,37.010 109.105,34.792 105.086,34.792 L91.365,34.792 C87.346,34.792 85.128,37.010 85.128,41.029 C85.128,41.029 85.128,56.337 85.128,74.333 C85.128,75.271 94.165,79.626 94.401,80.547 C101.286,107.449 95.897,128.980 89.370,129.985 C100.042,130.513 101.216,135.644 93.267,132.138 C94.483,117.784 99.228,117.812 112.869,131.610 C112.986,131.729 115.666,137.351 115.833,137.351 C131.170,137.351 148.050,137.351 148.050,137.351 C152.069,137.351 154.286,135.134 154.286,131.115 L154.286,117.394 C154.286,113.375 152.069,111.157 148.050,111.157 L111.322,111.157 Z"/>
+                              <path fill="#fefefe" d="M54.365,34.792 L18.331,137.351 L46.327,137.351 L52.425,119.611 L82.915,119.611 L88.875,137.351 L116.732,137.351 L80.836,34.792 L54.365,34.792 ZM58.800,96.882 L67.531,68.470 L77.094,96.882 L58.800,96.882 Z"/>
+                            </g>
+                          </svg>
+                          <svg v-else-if="id === 'music'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <linearGradient id="g" x1=".5" y1=".99" x2=".5" y2=".02">
+                              <stop offset="0" stop-color="#FA233B"/>
+                              <stop offset="1" stop-color="#FB5C74"/>
+                            </linearGradient>
+                            <path fill="url(#g)" d="M199 359V199q0-9 10-11l138-28q11-2 12 10v122q0 15-45 20c-57 9-48 105 30 79 30-11 35-40 35-69V88s0-20-17-15l-170 35s-13 2-13 18v203q0 15-45 20c-57 9-48 105 30 79 30-11 35-40 35-69"/>
+                          </svg>
+                          <svg v-else-if="id === 'sponsor'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="#DB61A2" fill-rule="evenodd" d="M6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.66 29.66 0 004.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.75.75 0 01-1.422 0C10.537 5.389 8.841 4 6.736 4zM12 20.703l.343.667a.75.75 0 01-.686 0l.343-.667zM1 8.513C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.146 31.146 0 01-5.233 3.576l-.025.013-.007.003-.002.001-.344-.666-.343.667-.003-.002-.007-.003-.025-.013A29.308 29.308 0 0110 20.408a31.147 31.147 0 01-3.611-2.632C3.8 15.573 1 12.332 1 8.514z"></path>
+                          </svg>
+                          <svg v-else-if="id === 'jsr'" width="100%" height="100%" viewBox="0 0 13 7" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0,2h2v-2h7v1h4v4h-2v2h-7v-1h-4" fill="#083344"/><g fill="#f7df1e"><path d="M1,3h1v1h1v-3h1v4h-3"/><path d="M5,1h3v1h-2v1h2v3h-3v-1h2v-1h-2"/><path d="M9,2h3v2h-1v-1h-1v3h-1"/></g>
+                          </svg>
+                        </div>
+                      </article>
+                    </a>
+                  </transition-group>
+                </div>
+              </template>
+            </section>
+          </template>
+        </transition-group>
+      </template>
+    </main>
+    <script async defer src="/as/v4/js/lecoq.js?v=0.9"></script>
+  <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a396e1233fb2fd2b',t:'MTc4OTEzMTg3OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

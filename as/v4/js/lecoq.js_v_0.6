@@ -1,0 +1,490 @@
+(async function () {
+  //Error handler
+  function uncaught(error) {
+    const element = document.createElement("div")
+    element.textContent = `[ERROR!] ${error.reason ?? error.message ?? `${error}`}`
+    element.classList.add("error")
+    document.querySelector("#loader-text")?.prepend(element)
+    document.querySelector("#loader-bar")?.classList.add("error")
+  }
+  window.addEventListener("error", uncaught)
+  window.addEventListener("unhandledrejection", uncaught)
+
+  function trimurl(url) {
+    return url.replace("/as/v4", "")
+  }
+  const version = new URL(document.querySelector("script[src^='/as/v4/js/lecoq.js']")?.src).searchParams.get("v")
+
+  //Resource loader
+  async function load(resources, callback) {
+    const state = {resources, loaded:0}
+    return new Promise(async (solve, reject) => {
+      try {
+        let pending = []
+        for (const resource of resources) {
+          //URL
+          if ((resource.url)&&(!resource.done)) {
+            pending.push(new Promise((solve, reject) => {
+              switch (true) {
+                case resource.url.endsWith(".js"):{
+                  const element = document.createElement("script")
+                  element.src = `${resource.url}?v=${version}`
+                  element.type = "text/javascript"
+                  element.async = true
+                  element.defer = true
+                  element.onload = () => solve(state.loaded++, callback?.(resource, state))
+                  element.onerror = () => reject(trimurl(resource.url))
+                  document.querySelector("body").appendChild(element)
+                  return
+                }
+                case resource.url.endsWith(".css"):{
+                  const element = document.createElement("link")
+                  element.rel = "stylesheet"
+                  element.href = `${resource.url}?v=${version}`
+                  element.onload = () => solve(state.loaded++, callback?.(resource, state))
+                  element.onerror = () => reject(trimurl(resource.url))
+                  document.querySelector("head").appendChild(element)
+                  return
+                }
+              }
+            }))
+            continue
+          }
+          //Function
+          if (resource.func) {
+            pending.push(new Promise(async (solve, reject) => {
+              try {
+                await resource.func(resource)
+                state.loaded++
+                callback?.(resource, state)
+                solve()
+              }
+              catch (error) {
+                reject(error)
+              }
+            }))
+            continue
+          }
+          //Syncer
+          if (resource.wait) {
+            await Promise.all(pending)
+            pending = []
+          }
+          //State update
+          state.loaded++
+          callback?.(resource, state)
+        }
+        solve()
+      }
+      catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  //Download language
+  async function download(language) {
+    if (!["en", "fr"].includes(language))
+      language = "en"
+    const url = `/as/v4/content/${language}.json`
+    if (!download.cache[language]) {
+      const content = await fetch(url).then(response => response.json())
+      download.cache[language] = content
+    }
+    return {language, url, content:download.cache[language]}
+  }
+  download.cache = {}
+  const art = []
+
+  //Load syntax highlighter
+  function highlighter(callback) {
+    if (highlighter.loading)
+      return
+    highlighter.loading = true
+    const element = document.createElement("script")
+    element.src = `/as/v4/js/highlight.min.js?v=${version}`
+    element.type = "text/javascript"
+    element.async = true
+    element.onload = callback
+    document.querySelector("body").appendChild(element)
+  }
+
+  //App instance
+  function app() {
+    return app.instance = Vue.createApp({
+      //Data
+      data() {
+        return {
+          mounted:false,
+          loaded:false,
+          enabled:{},
+          state:{
+            user:{changed:{tab:false}},
+            aside:{open:false}
+          },
+          cache:download.cache,
+          gallery:art,
+          language:"",
+          search:"",
+          tab:null,
+          selected:null,
+          _bounce:{
+            update:null
+          },
+          lazy:null,
+          timeline:{entries:[], page:0, loading:false},
+          deps:{hljs:false},
+          date:new Date(),
+        }
+      },
+      //Watchers
+      watch:{
+        //Selected watcher
+        selected:{
+          immediate: true,
+          async handler(current, previous) {
+            if (current !== previous) {
+              if (current?.stub)
+                await this.hydrate(current)
+              this.update()
+            }
+          }
+        },
+        //Tab watcher
+        tab:{
+          immediate: true,
+          handler(current, previous) {
+            if (current !== previous) {
+              if ((current?.id)&&(previous)) {
+                this.selected = this.__overview(current.id)
+                this.state.user.changed.tab = true
+              }
+              if ((current?.id === "feed")&&(!this.timeline.entries.length))
+                this.next()
+              this.update()
+            }
+          }
+        }
+      },
+      //Methods
+      methods:{
+        //Change language
+        async intl() {
+          const {language, content} = await download(...arguments)
+          this.language = language
+          this.cache[language] = content
+          if (this.selected)
+            this.selected = this.section.filter(({id}) => id === this.selected.id).at(0) ?? null
+        },
+        //History update
+        history() {
+          const hash = this.selected?.id ? `#${this.selected?.id}` : ""
+          const params = new URLSearchParams(Object.fromEntries([
+            ["tab", this.tab?.id],
+            ["language", this.language !== "en" ? this.language : null],
+          ].filter(([_, value]) => value)))
+          window.history.replaceState(null, "Lecoq ~ Simon Lecoq's online portfolio", `/?${params}${hash}`)
+        },
+        //Hydrate entry with its full content
+        async hydrate(entry) {
+          const content = await fetch(`/as/v4/content/${this.language}/${this.tab?.id ?? "code"}/${entry.id}.json`).then(response => response.json())
+          delete entry.stub
+          Object.assign(entry, content)
+        },
+        //Load next feed page
+        feedscroll() {
+          if (this.tab?.id !== "feed")
+            return
+          const scrollable = document.querySelector(".timeline")?.closest("section")
+          if (!scrollable)
+            return
+          //Desktop layout
+          if (scrollable.scrollHeight > scrollable.clientHeight) {
+            if (scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 600)
+              this.next()
+            return
+          }
+          //Mobile layout
+          if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 600)
+            this.next()
+        },
+        //Load next feed page
+        async next() {
+          if ((this.timeline.loading)||(this.timeline.page >= (this.text?.feed?.pages ?? 0)))
+            return
+          this.timeline.loading = true
+          try {
+            const entries = await fetch(`/as/v4/content/feed/pages/${this.timeline.page}.json`).then(response => response.json())
+            this.timeline.entries.push(...entries)
+            this.timeline.page++
+          }
+          finally {
+            this.timeline.loading = false
+          }
+          this.update()
+        },
+        //Feed content
+        feed(content, language) {
+          if (typeof content === "string")
+            return content
+          if (content?.[language])
+            return content?.[language]
+          if (Object.keys(content).length)
+            return content[Object.keys(content)[0]]
+          return ""
+        },
+        //Markdown parser
+        markdown(content = "") {
+          content = content.toString()
+          void this.deps.hljs
+          if ((!window.hljs)&&(content.includes("```")))
+            highlighter(() => this.deps.hljs = true)
+          window.marked.setOptions({
+            highlight(code, language) {
+              if (!window.hljs)
+                return null
+              return window.hljs.highlight(code, {language:hljs.getLanguage(language) ? language : "plaintext"}).value
+            }
+          })
+          return window.marked.parse(content).replace(/^\s*<p>([\s\S]*)<\/p>\s*$/, "$1")
+        },
+        //General updater
+        update() {
+          if (!this.mounted)
+            return
+          clearTimeout(this._bounce.update)
+          this.enabled = {}
+          this.history()
+          this._bounce.update = setTimeout(async () => {
+            //Update lazy loader (note: update() drops already managed elements from its observer, so they must be observed back to keep enter/exit callbacks working)
+            this.lazy?.update()
+            document.querySelectorAll(".lazy[data-ll-status]").forEach(element => this.lazy?._observer?.observe(element))
+
+            //Feed infinite scrolling
+            const scrollable = document.querySelector(".timeline")?.closest("section")
+            if (scrollable) {
+              if (!scrollable.dataset.feedscroll) {
+                scrollable.dataset.feedscroll = true
+                scrollable.addEventListener("scroll", () => this.feedscroll(), {passive:true})
+              }
+              this.feedscroll()
+            }
+
+            if (this.selected?.cards) {
+              const github = this.selected?.cards.find(({type}) => type === "github")
+              if (github) {
+                const data = await fetch(`https://github-api.lecoq.io/${github.repo}:${github.branch}`).then(response => response.json())
+                github.data = data
+              }
+            }
+
+            //Post-resume
+            if (this.tab?.id === "resume") {
+              const iframe = document.querySelector("iframe")
+              if (iframe) {
+                const ready = () => {
+                  iframe.contentWindow.document.querySelector("aside")?.remove()
+                  iframe.contentWindow.document.querySelector("body").style.backgroundColor = getComputedStyle(document.body).getPropertyValue("--white")
+                  iframe.style.height = `${iframe.contentWindow.document.documentElement.scrollHeight}px`
+                  iframe.classList.add("visible")
+                  document.querySelector(".resume .frame .wrapper")?.remove()
+                }
+                if ((iframe.contentWindow.document.readyState === "complete")&&(iframe.contentWindow.location.href !== "about:blank"))
+                  ready()
+                else
+                  iframe.addEventListener("load", ready, {once:true})
+              }
+            }
+          }, 1000)
+        },
+        //Get content
+        __get(property, {force = false} = {}) {
+          if ((!this.loaded)&&(!force))
+            return []
+          if (!Array.isArray(this.text?.[property]))
+            return []
+          const entries = this.text?.[property]
+            .filter(({name}) => {
+              if (this.search)
+                return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().includes(this.search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase())
+              return true
+            })
+            .sort((a, b) => new Date(...[b.created?.trim()].filter(x => x)).getTime() - new Date(...[a.created?.trim()].filter(x => x)).getTime())
+          const date = entries.filter(({hidden}) => !hidden)
+          const featured = date.filter(({tags = []}) => tags.includes("featured"))
+          const overview = this.__fill(entries.flatMap(entry => (entry.cards ?? []).filter(({overview}) => overview).map(card => ({...card, ...card.overview, entry}))))
+          return [
+            ...(overview.length ? [{id:"overview", name:this.text?.filters.overview, cards:overview}] : []),
+            ...(featured.length ? [{id:"featured", name:this.text?.filters.featured, category:true}] : []),
+            ...featured,
+            ...(date.length ? [{id:"date", name:this.text?.filters.date, category:true}] : []),
+            ...date,
+          ]
+        },
+        //Get overview
+        __overview(property) {
+          return this.__get(property, {force:true}).find(({id}) => id === "overview") ?? null
+        },
+        //Fill overview cards
+        __fill(cards) {
+          const processed = new Set()
+          const result = []
+          let unit = 0
+          for (let i = 0; i < cards.length; i++) {
+            const card = cards[i]
+            const id = `${card.entry.id}/${card.name}`
+            if (processed.has(id))
+              continue
+            processed.add(id)
+            result.push(card)
+            unit += (card.size === "half") ? 1 : 2
+            if ((unit%2)&&(i+1 < cards.length)&&(cards[i+1].size !== "half")) {
+              for (let j = i+1; j < cards.length; j++) {
+                const candidate = cards[j]
+                if (candidate.size === "half") {
+                  const id = `${candidate.entry.id}/${candidate.name}`
+                  processed.add(id)
+                  result.push(candidate)
+                  unit++
+                  break
+                }
+              }
+            }
+          }
+          return result
+        },
+        //Atob
+        atob() {
+          return atob(...arguments)
+        }
+      },
+      //Computed properties
+      computed:{
+        //Text
+        text() {
+          return this.cache[this.language] ?? null
+        },
+        //Current tab
+        current() {
+          return this.menu.find(({id}) => id === this.tab?.id)?.name ?? ""
+        },
+        //Menu content
+        menu() {
+          return this.loaded ? (this.text?.menu ?? []) : []
+        },
+        //Section content
+        section() {
+          return this.tab?.id ? this.__get(this.tab.id) : []
+        },
+        //Memory content
+        memory() {
+          return this.loaded ? (this.text?.memory ?? {}) : {}
+        },
+        //Resume content
+        resume() {
+          return this.loaded ? (this.text?.resume ?? {}) : {}
+        },
+        //Social content
+        social() {
+          return this.loaded ? (this.text?.social ?? {}) : {}
+        },
+        // Art content
+        art() {
+          return this.loaded ? (this.text?.art ?? {}) : {}
+        }
+      },
+      //Mounted
+      async mounted() {
+        const params = new URLSearchParams(location.search)
+
+        //Resize listener
+        window.addEventListener("resize", () => this.state.aside.open = false)
+
+        //Scroll listener (document-level scrolling on mobile layouts)
+        window.addEventListener("scroll", () => this.feedscroll(), {passive:true})
+
+        //Lazy loader
+        this.lazy = new LazyLoad({
+          unobserve_completed: false,
+          callback_exit(element) {
+            if (element.tagName.toLocaleLowerCase() === "video")
+              element.removeAttribute("src")
+          }
+        })
+
+        //Language
+        this.language = Object.keys(download.cache).at(0)
+
+        //Tab
+        if (params.get("tab")) {
+          const selected = params.get("tab")
+          this.tab = this.cache[this.language]?.menu.find(({id, disabled}) => (id === selected)&&(!disabled)) ?? null
+        }
+        this.tab ??= this.cache[this.language]?.menu.find(({id}) => id === "feed") ?? null
+
+        //Selected
+        if ((this.tab?.id)&&(window.location.hash)) {
+          const selected = window.location.hash.substring(1)
+          this.selected = selected === "overview" ? this.__overview(this.tab.id) : (Array.isArray(this.cache[this.language]?.[this.tab.id]) ? this.cache[this.language][this.tab.id].find(({id}) => id === selected) : null) ?? null
+        }
+        else if (this.tab?.id)
+          this.selected ??= this.__overview(this.tab.id)
+
+        //Date update
+        setInterval(() => this.date = new Date(), 60*1000)
+
+        //State update
+        this.mounted = true
+      }
+    })
+  }
+
+  //Start app
+  const start = Date.now()
+  const content = download(new URLSearchParams(location.search).get("language") ?? navigator.language ?? navigator.userLanguage)
+  await load([
+    {text:`booting v${version}...`},
+    {text:"loading minimal resources..."},
+    {url:"/as/v4/index.html", done:true},
+    {url:"/as/v4/css/root.css", done:true},
+    {url:"/as/v4/js/lecoq.js", done:true},
+    {text:"loading additional resources..."},
+    {url:"/as/v4/css/styles.css"},
+    {url:"/as/v4/css/tokyo-night-dark.min.css"},
+    {url:"/as/v4/js/marked.min.js"},
+    {url:"/as/v4/js/lazyload.min.js"},
+    {url:"/as/v4/js/vue.min.js"},
+    {text:"loading content resources...", wait:true},
+    {async func(resource) {
+      const {url} = await content
+      resource.url = url
+    }},
+    {async func(resource) {
+      const url = `/as/v4/content/art.json`
+      art.push(...await fetch(url).then(response => response.json()))
+      resource.url = url
+    }},
+    {text:"creating app...", wait:true},
+    {func:app},
+    {text:"mounting app...", wait:true},
+    {async func() { app.instance = await app.instance.mount("main") }},
+    {text:"starting app...", wait:true},
+  ], (resource, {resources, loaded}) => {
+    const element = document.createElement("div")
+    if (resource.url)
+      element.textContent = trimurl(resource.url)
+    if (resource.text)
+      element.textContent = resource.text
+    if (element.textContent) {
+      element.innerHTML = `[${(Date.now() - start).toString().substring(0, 6).padStart(6).replaceAll(" ", "&nbsp;")}] ${element.textContent}`
+      document.querySelector("#loader-text").prepend(element)
+    }
+    document.querySelector("#loader-bar > div").style.width = `${100*(loaded/resources.length)}%`
+  })
+  setTimeout(() => {
+    document.querySelector("body").classList.add("loaded")
+    app.instance.loaded = true
+    document.querySelector("#loader").style.display = "none"
+  }, 500)
+
+})()

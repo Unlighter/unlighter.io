@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "../../brain"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../gamejam"
+		},
+		{
+			"path": "../../quadtree"
+		},
+		{
+			"path": "../../access"
+		},
+		{
+			"path": "../../cdn-cgi"
+		},
+		{
+			"path": "../../_external"
+		},
+		{
+			"path": "../../sound"
+		},
+		{
+			"path": "../../as"
+		},
+		{
+			"path": "../../resume"
+		}
+	]
+}
