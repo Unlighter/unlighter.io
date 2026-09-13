@@ -1304,3 +1304,22 @@ nav .button.active > div {
     background-image: none !important;
     color: #000000 !important;
 }
+
+
+/* ===== ADITYA NAV ===== */
+
+nav .button.active > div > i {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    background-color: #D7834F !important;
+}
+
+nav .button.active > div > i > img {
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    object-fit: contain !important;
+}
