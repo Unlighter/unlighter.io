@@ -1265,55 +1265,53 @@ article.overview:hover {
 
 /* ===== ADITYA NAV CUSTOMIZATION ===== */
 
-/* Remove the unwanted white border/line */
-nav .button.active,
-nav .button.active:hover {
+/* Explore only */
+#nav-explore {
     border-color: transparent !important;
+    border-bottom-color: transparent !important;
 }
 
-/* Explore icon box */
-nav .button.active > div > i {
+#nav-explore > div {
+    background: #D7834F !important;
+    background-image: none !important;
+    color: #000000 !important;
+
+    /* Slightly taller than the normal navigation buttons */
+    height: 30px !important;
+    min-height: 30px !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    margin-top: 2px !important;
+    margin-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+
+/* Explore icon */
+#nav-explore > div > i {
     width: 16px !important;
     height: 16px !important;
     min-width: 16px !important;
     min-height: 16px !important;
 
-    margin: var(--spacing-2) !important;
+    margin: 4px !important;
 
-    /* NO green background */
     background-color: transparent !important;
 }
 
-/* SVG itself */
-nav .button.active > div > i svg {
+/* Explore SVG */
+#nav-explore > div > i svg {
     width: 16px !important;
     height: 16px !important;
+
     display: block;
+
     fill: #ffffff !important;
 }
 
-/* Brown Explore box */
-nav .button.active > div {
-    background: #D7834F !important;
-    background-image: none !important;
-    color: #000000 !important;
-
-    /* slightly taller than Resume */
-    min-height: 30px !important;
-    height: 30px !important;
-
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-
-    box-sizing: border-box;
-}
-
-/* Remove the extra active-item height from the original CSS */
-nav .button.active > div {
-    margin-bottom: 0 !important;
-}
-
-/* Remove last hidden toggle/button */
-nav .button:last-child {
+/* Remove the final unwanted button */
+nav > .button:last-child {
     display: none !important;
 }
